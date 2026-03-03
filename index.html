@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NovaDash | Analytics Dashboard</title>
+  <meta name="description" content="Professional analytics dashboard (HTML/CSS/JS) with glass UI, dark/light toggle, sidebar, charts, table, filters, and export."/>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Top progress -->
+  <div class="progress" aria-hidden="true">
+    <div class="progress__bar" id="progressBar"></div>
+  </div>
+
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar glass" id="sidebar" aria-label="Sidebar">
+      <div class="side-top">
+        <a class="brand" href="#">
+          <span class="brand__dot" aria-hidden="true"></span>
+          <span class="brand__txt">NovaDash</span>
+        </a>
+
+        <button class="icon-btn" id="collapseBtn" type="button" aria-label="Collapse sidebar">
+          ⟷
+        </button>
+      </div>
+
+      <nav class="nav">
+        <button class="nav__item is-active" data-view="overview" type="button">
+          <span class="nav__ico" aria-hidden="true">📊</span>
+          <span class="nav__txt">Overview</span>
+        </button>
+        <button class="nav__item" data-view="sales" type="button">
+          <span class="nav__ico" aria-hidden="true">💳</span>
+          <span class="nav__txt">Sales</span>
+        </button>
+        <button class="nav__item" data-view="customers" type="button">
+          <span class="nav__ico" aria-hidden="true">👥</span>
+          <span class="nav__txt">Customers</span>
+        </button>
+        <button class="nav__item" data-view="settings" type="button">
+          <span class="nav__ico" aria-hidden="true">⚙️</span>
+          <span class="nav__txt">Settings</span>
+        </button>
+      </nav>
+
+      <div class="side-bottom">
+        <div class="chip-row">
+          <span class="mini-chip">HTML</span>
+          <span class="mini-chip">CSS</span>
+          <span class="mini-chip">JS</span>
+        </div>
+        <p class="micro muted">Client-ready dashboard UI • No libraries</p>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar__left">
+          <button class="icon-btn topbar__menu" id="mobileMenuBtn" type="button" aria-label="Open menu">☰</button>
+          <div>
+            <h1 class="h1">Analytics</h1>
+            <p class="muted">Track KPIs, trends, and recent activity.</p>
+          </div>
+        </div>
+
+        <div class="topbar__right">
+          <div class="search glass">
+            <span class="search__ico" aria-hidden="true">⌕</span>
+            <input id="searchInput" type="search" placeholder="Search transactions..." aria-label="Search transactions" />
+          </div>
+
+          <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle theme">
+            <span class="icon" aria-hidden="true">☾</span>
+            <span class="txt">Theme</span>
+          </button>
+
+          <button class="icon-btn" id="exportBtn" type="button" aria-label="Export CSV">
+            ⬇ <span class="txt">Export</span>
+          </button>
+
+          <button class="avatar glass" id="profileBtn" type="button" aria-label="Open profile">
+            <span class="avatar__ring" aria-hidden="true"></span>
+            <span class="avatar__txt">DF</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <section class="content">
+        <!-- Filters row -->
+        <div class="row">
+          <div class="seg glass" role="tablist" aria-label="Date range">
+            <button class="seg__btn is-active" data-range="7" role="tab" aria-selected="true" type="button">7D</button>
+            <button class="seg__btn" data-range="30" role="tab" aria-selected="false" type="button">30D</button>
+            <button class="seg__btn" data-range="90" role="tab" aria-selected="false" type="button">90D</button>
+          </div>
+
+          <div class="select glass">
+            <label class="sr-only" for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="all">All statuses</option>
+              <option value="paid">Paid</option>
+              <option value="pending">Pending</option>
+              <option value="failed">Failed</option>
+            </select>
+          </div>
+
+          <button class="btn glass" id="addTxnBtn" type="button">
+            + New transaction
+          </button>
+        </div>
+
+        <!-- KPI cards -->
+        <div class="kpis">
+          <article class="kpi glass">
+            <div class="kpi__top">
+              <span class="kpi__label muted">Revenue</span>
+              <span class="pill up">▲ <span id="revDelta">+0%</span></span>
+            </div>
+            <div class="kpi__val" id="kpiRevenue">$0</div>
+            <div class="kpi__sub muted">Last <span id="rangeLabel">7</span> days</div>
+          </article>
+
+          <article class="kpi glass">
+            <div class="kpi__top">
+              <span class="kpi__label muted">Orders</span>
+              <span class="pill up">▲ <span id="ordDelta">+0%</span></span>
+            </div>
+            <div class="kpi__val" id="kpiOrders">0</div>
+            <div class="kpi__sub muted">Conversion trend</div>
+          </article>
+
+          <article class="kpi glass">
+            <div class="kpi__top">
+              <span class="kpi__label muted">Customers</span>
+              <span class="pill up">▲ <span id="cusDelta">+0%</span></span>
+            </div>
+            <div class="kpi__val" id="kpiCustomers">0</div>
+            <div class="kpi__sub muted">Active users</div>
+          </article>
+
+          <article class="kpi glass">
+            <div class="kpi__top">
+              <span class="kpi__label muted">Refunds</span>
+              <span class="pill down">▼ <span id="refDelta">+0%</span></span>
+            </div>
+            <div class="kpi__val" id="kpiRefunds">$0</div>
+            <div class="kpi__sub muted">Risk indicator</div>
+          </article>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid">
+          <section class="panel glass">
+            <div class="panel__head">
+              <h2 class="h2">Revenue trend</h2>
+              <p class="muted">Sparkline bars (CSS) • Real data from JS</p>
+            </div>
+            <div class="bars" id="bars"></div>
+            <div class="panel__foot muted">
+              Peak day: <strong id="peakDay">—</strong> • Avg: <strong id="avgRev">—</strong>
+            </div>
+          </section>
+
+          <section class="panel glass">
+            <div class="panel__head">
+              <h2 class="h2">Status breakdown</h2>
+              <p class="muted">Donut (CSS) • Updates with filters</p>
+            </div>
+
+            <div class="donut-wrap">
+              <div class="donut" id="donut" aria-label="Status donut chart">
+                <div class="donut__hole"></div>
+              </div>
+
+              <div class="legend">
+                <div class="leg"><span class="dot paid"></span> Paid <strong id="paidPct">0%</strong></div>
+                <div class="leg"><span class="dot pending"></span> Pending <strong id="pendingPct">0%</strong></div>
+                <div class="leg"><span class="dot failed"></span> Failed <strong id="failedPct">0%</strong></div>
+              </div>
+            </div>
+
+            <div class="panel__foot muted">
+              Total transactions: <strong id="txnCount">0</strong>
+            </div>
+          </section>
+        </div>
+
+        <!-- Table -->
+        <section class="panel glass">
+          <div class="panel__head panel__head--row">
+            <div>
+              <h2 class="h2">Recent transactions</h2>
+              <p class="muted">Search + filter + CSV export + modal details</p>
+            </div>
+
+            <div class="table-actions">
+              <button class="mini-btn" id="sortAmountBtn" type="button">Sort by amount</button>
+              <button class="mini-btn" id="sortDateBtn" type="button">Sort by date</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Customer</th>
+                  <th>Item</th>
+                  <th>Status</th>
+                  <th class="right">Amount</th>
+                  <th class="right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <!-- Transaction Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__panel glass" role="dialog" aria-modal="true" aria-label="Transaction details">
+      <button class="modal__close" id="modalClose" type="button" aria-label="Close">✕</button>
+
+      <div class="modal__head">
+        <h3 class="h2" id="mTitle">Transaction</h3>
+        <span class="pill" id="mStatus">—</span>
+      </div>
+
+      <div class="modal__grid">
+        <div class="mcard">
+          <span class="muted">Customer</span>
+          <strong id="mCustomer">—</strong>
+        </div>
+        <div class="mcard">
+          <span class="muted">Item</span>
+          <strong id="mItem">—</strong>
+        </div>
+        <div class="mcard">
+          <span class="muted">Date</span>
+          <strong id="mDate">—</strong>
+        </div>
+        <div class="mcard">
+          <span class="muted">Amount</span>
+          <strong id="mAmount">—</strong>
+        </div>
+      </div>
+
+      <div class="modal__actions">
+        <button class="btn glass" id="markPaidBtn" type="button">Mark as Paid</button>
+        <button class="btn glass danger" id="deleteBtn" type="button">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Transaction Modal -->
+  <div class="modal" id="addModal" aria-hidden="true">
+    <div class="modal__panel glass" role="dialog" aria-modal="true" aria-label="Add transaction">
+      <button class="modal__close" id="addClose" type="button" aria-label="Close">✕</button>
+
+      <div class="modal__head">
+        <h3 class="h2">New transaction</h3>
+        <span class="muted">Demo form (front-end only)</span>
+      </div>
+
+      <form class="form" id="addForm" novalidate>
+        <label>
+          Customer
+          <input name="customer" required minlength="2" placeholder="e.g., Sarah Khan"/>
+          <small class="err"></small>
+        </label>
+
+        <label>
+          Item
+          <input name="item" required minlength="2" placeholder="e.g., Pro Plan"/>
+          <small class="err"></small>
+        </label>
+
+        <div class="form-row">
+          <label>
+            Status
+            <select name="status">
+              <option value="paid">Paid</option>
+              <option value="pending">Pending</option>
+              <option value="failed">Failed</option>
+            </select>
+          </label>
+
+          <label>
+            Amount ($)
+            <input name="amount" required type="number" min="1" step="0.01" placeholder="e.g., 49.99"/>
+            <small class="err"></small>
+          </label>
+        </div>
+
+        <button class="btn glass" type="submit">Add</button>
+        <p class="muted micro" id="addNote" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
